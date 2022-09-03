@@ -4,7 +4,7 @@ namespace Core\Response;
 
 class Response
 {
-    public function json(mixed $data, int $status = 200, array $headers = []): void
+    public function json(mixed $data, int $status = STATUS_SUCCESS, array $headers = []): void
     {
         $json = json_encode($data);
         if ($json === false) {
@@ -12,7 +12,7 @@ class Response
             if ($json === false) {
                 $json = '{"error":"unknown"}';
             }
-            http_response_code(500);
+            http_response_code(STATUS_SERVER_INTERNAL_ERROR);
         } else {
             http_response_code($status);
         }

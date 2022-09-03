@@ -5,6 +5,7 @@ namespace Core\App;
 use Core\Request\Request;
 use Core\Response\Response;
 use Dotenv\Dotenv;
+use Src\Helpers\Helper;
 
 class App
 {
@@ -18,7 +19,19 @@ class App
 
     public function define()
     {
+        // Directory
         define("__ROOT__", str_replace("\core\App", "", __DIR__));
+
+        // HTTP Status Code
+        define("STATUS_SUCCESS", 200);
+        define("STATUS_BAD_REQUEST", 400);
+        define("STATUS_UNAUTHORIZED", 401);
+        define("STATUS_FORBIDDEN", 403);
+        define("STATUS_NOT_FOUND", 404);
+        define("STATUS_METHOD_NOT_ALLOWED", 405);
+        define("STATUS_FAILED_VALIDATION", 422);
+        define("STATUS_SERVER_INTERNAL_ERROR", 500);
+        define("STATUS_SERVICE_UNAVAILABLE", 503);
     }
 
     public function env()
@@ -39,7 +52,7 @@ class App
 
     public function run()
     {
-        if (array_key_exists($uri = $_SERVER["REQUEST_URI"], $this->routes)) {
+        if (array_key_exists($uri = $_SERVER["REDIRECT_URL"], $this->routes)) {
             $req = new Request($this->routes[$uri]);
             $res = new Response();
             $isSuccess = $this->runGlobalMiddlewares($req, $res);
@@ -79,6 +92,6 @@ class App
 
     private function runNotFoundResponse(Response $res)
     {
-        return $res->json(["error" => "Not Found"], 404);
+        return $res->json(["error" => "Not Found"], STATUS_NOT_FOUND);
     }
 }

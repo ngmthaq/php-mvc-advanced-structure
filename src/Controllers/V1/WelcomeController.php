@@ -20,6 +20,6 @@ class WelcomeController extends Controller
 
     public function user()
     {
-        return $this->res->json(["user" => "123"]);
+        return $this->res->json(["user" => $this->req->query()]);
     }
 }

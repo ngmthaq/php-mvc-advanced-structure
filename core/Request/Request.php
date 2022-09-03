@@ -5,10 +5,24 @@ namespace Core\Request;
 class Request
 {
     protected $_CONFIGS;
+    protected $_ORIGIN_GET;
+    protected $_ORIGIN_POST;
 
     public function __construct(array $configs)
     {
         $this->_CONFIGS = $configs;
+        $this->_ORIGIN_GET = $_GET;
+        $this->_ORIGIN_POST = $_POST;
+    }
+
+    public function mutateQuery(array $data)
+    {
+        $this->_ORIGIN_GET = $data;
+    }
+
+    public function mutateParams(array $data)
+    {
+        $this->_ORIGIN_POST = $data;
     }
 
     public function configs()
@@ -18,15 +32,15 @@ class Request
 
     public function query(string $var = "*"): mixed
     {
-        if ($var === "*") return $_GET;
-        if (array_key_exists($var, $_GET)) return $_GET[$var];
+        if ($var === "*") return $this->_ORIGIN_GET;
+        if (array_key_exists($var, $this->_ORIGIN_GET)) return $this->_ORIGIN_GET[$var];
         return null;
     }
 
     public function params(string $var = "*"): mixed
     {
-        if ($var === "*") return $_POST;
-        if (array_key_exists($var, $_POST)) return $_POST[$var];
+        if ($var === "*") return $this->_ORIGIN_POST;
+        if (array_key_exists($var, $this->_ORIGIN_POST)) return $this->_ORIGIN_POST[$var];
         return null;
     }
 
