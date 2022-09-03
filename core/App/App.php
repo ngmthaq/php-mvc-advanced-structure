@@ -5,6 +5,7 @@ namespace Core\App;
 use Core\Request\Request;
 use Core\Response\Response;
 use Dotenv\Dotenv;
+use Error;
 use Src\Helpers\Helper;
 
 class App
@@ -40,14 +41,20 @@ class App
         $dotenv->load();
     }
 
-    public function get(string $uri, array $action)
+    public function get(string $uri, array $action, array $middlewares = [])
     {
-        $this->routes = array_merge($this->routes, [$uri => ["method" => "GET", "action" => $action]]);
+        $this->routes = array_merge(
+            $this->routes,
+            [$uri => ["method" => "GET", "action" => $action, "middlewares" => $middlewares]]
+        );
     }
 
-    public function post(string $uri, array $action)
+    public function post(string $uri, array $action, array $middlewares = [])
     {
-        $this->routes = array_merge($this->routes, [$uri => ["method" => "POST", "action" => $action]]);
+        $this->routes = array_merge(
+            $this->routes,
+            [$uri => ["method" => "POST", "action" => $action, "middlewares" => $middlewares]]
+        );
     }
 
     public function run()
@@ -55,7 +62,7 @@ class App
         if (array_key_exists($uri = $_SERVER["REDIRECT_URL"], $this->routes)) {
             $req = new Request($this->routes[$uri]);
             $res = new Response();
-            $isSuccess = $this->runGlobalMiddlewares($req, $res);
+            $isSuccess = $this->runMiddlewares($req, $res);
             if ($isSuccess) {
                 $this->runController($uri, $req, $res);
             } else {
@@ -74,13 +81,24 @@ class App
         call_user_func_array([new $controller($req, $res), $callable], []);
     }
 
-    private function runGlobalMiddlewares(Request $req, Response $res)
+    private function runMiddlewares(Request $req, Response $res)
     {
         $middlewaresDir = __ROOT__ . "\\configs\\middlewares.php";
         $middlewares = include_once($middlewaresDir);
         $globalMiddlewares = $middlewares["global"];
+        $aliasMiddlewares = $middlewares["alias"];
+        $configMiddlewares = $req->configs()["middlewares"];
+        $routeMiddlewares = array_map(function ($m) use ($aliasMiddlewares) {
+            if (array_key_exists($m, $aliasMiddlewares)) {
+                return $aliasMiddlewares[$m];
+            }
 
-        foreach ($globalMiddlewares as $middleware) {
+            throw new Error("Middleware not found: " . $m);
+        }, $configMiddlewares);
+
+        $totalMiddlewares = array_merge($globalMiddlewares, $routeMiddlewares);
+
+        foreach ($totalMiddlewares as $middleware) {
             $isSuccess = call_user_func_array([new $middleware($req, $res), "handle"], []);
             if (!$isSuccess) {
                 return false;

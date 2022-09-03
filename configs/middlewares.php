@@ -1,11 +1,16 @@
 <?php
 
+use Src\Middlewares\DetectMethod;
+use Src\Middlewares\HandleCors;
+use Src\Middlewares\SessionStart;
+use Src\Middlewares\TrimString;
+
 return [
     "global" => [
-        \Src\Middlewares\HandleCors::class,
-        \Src\Middlewares\DetectMethod::class,
-        \Src\Middlewares\SessionStart::class,
-        \Src\Middlewares\TrimString::class,
+        HandleCors::class,
+        DetectMethod::class,
+        SessionStart::class,
+        TrimString::class,
     ],
     "alias" => []
 ];
