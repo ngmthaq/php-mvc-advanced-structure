@@ -2,9 +2,9 @@
 
 namespace Core\Response;
 
-class Response
+final class Response
 {
-    public function json(mixed $data, int $status = STATUS_SUCCESS, array $headers = []): void
+    final public function json(mixed $data, int $status = STATUS_SUCCESS, array $headers = []): void
     {
         $json = json_encode($data);
         if ($json === false) {

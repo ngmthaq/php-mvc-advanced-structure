@@ -18,8 +18,15 @@ class WelcomeController extends Controller
         return $this->res->json(["hello" => "world"]);
     }
 
-    public function user()
+    public function users()
     {
-        return $this->res->json(["user" => $this->req->query()]);
+        $users = $this->builder->table("users")
+            ->where("active", 1)
+            ->andWhere("role", 1)
+            ->limit(10)
+            ->offset(0)
+            ->get();
+
+        return $this->res->json(["users" => $users]);
     }
 }
