@@ -1,0 +1,20 @@
+{
+  "name": "ngmthaq/php",
+  "description": "PHP project for API",
+  "type": "project",
+  "require": {
+    "vlucas/phpdotenv": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Src\\": "src/",
+      "Core\\": "core/"
+    }
+  },
+  "authors": [
+    {
+      "name": "ngmthaq",
+      "email": "nguyenmanhthang2000.fb@gmail.com"
+    }
+  ]
+}
