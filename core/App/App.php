@@ -5,7 +5,7 @@ namespace Core\App;
 use Core\Request\Request;
 use Core\Response\Response;
 use Dotenv\Dotenv;
-use Error;
+use Exception;
 use Src\Helpers\Helper;
 
 class App
@@ -31,7 +31,7 @@ class App
         define("STATUS_NOT_FOUND", 404);
         define("STATUS_METHOD_NOT_ALLOWED", 405);
         define("STATUS_FAILED_VALIDATION", 422);
-        define("STATUS_SERVER_INTERNAL_ERROR", 500);
+        define("STATUS_INTERNAL_SERVER_ERROR", 500);
         define("STATUS_SERVICE_UNAVAILABLE", 503);
     }
 
@@ -59,17 +59,22 @@ class App
 
     public function run()
     {
-        if (array_key_exists($uri = $_SERVER["REDIRECT_URL"], $this->routes)) {
-            $req = new Request($this->routes[$uri]);
-            $res = new Response();
-            $isSuccess = $this->runMiddlewares($req, $res);
-            if ($isSuccess) {
-                $this->runController($uri, $req, $res);
+        try {
+            $uri = explode("?", $_SERVER["REQUEST_URI"])[0];
+            if ($uri && array_key_exists($uri, $this->routes)) {
+                $req = new Request($this->routes[$uri]);
+                $res = new Response();
+                $isSuccess = $this->runMiddlewares($req, $res);
+                if ($isSuccess) {
+                    $this->runController($uri, $req, $res);
+                } else {
+                    return 0;
+                }
             } else {
-                return 0;
+                $this->runNotFoundResponse(new Response());
             }
-        } else {
-            $this->runNotFoundResponse(new Response());
+        } catch (Exception $e) {
+            $this->runISEResponse(new Response(), $e);
         }
     }
 
@@ -93,7 +98,7 @@ class App
                 return $aliasMiddlewares[$m];
             }
 
-            throw new Error("Middleware not found: " . $m);
+            throw new Exception("Middleware not found: " . $m);
         }, $configMiddlewares);
 
         $totalMiddlewares = array_merge($globalMiddlewares, $routeMiddlewares);
@@ -111,5 +116,20 @@ class App
     private function runNotFoundResponse(Response $res)
     {
         return $res->json(["error" => "Not Found"], STATUS_NOT_FOUND);
+    }
+
+    private function runISEResponse(Response $res, Exception $e)
+    {
+        $response = ["error" => "Internal Server Error"];
+        if (Helper::env("APP_ENV") === "development") {
+            $response = array_merge($response, ["stack" => [
+                "message" => $e->getMessage(),
+                "file" => $e->getFile(),
+                "line" => $e->getLine(),
+                "trace" => $e->getTraceAsString(),
+            ]]);
+        }
+
+        return $res->json($response, STATUS_INTERNAL_SERVER_ERROR);
     }
 }

@@ -40,4 +40,31 @@ class Helper extends CoreHelper
         echo "</pre>";
         die();
     }
+
+    public static function generateRandomString($length = 10)
+    {
+        $characters = "0123456789abcdefghijklmnopqrstuvwxyz";
+        $charactersLength = strlen($characters);
+        $randomString = "";
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public static function randomId()
+    {
+        $result = [];
+        for ($i = 0; $i < 4; $i++) {
+            if ($i === 0) {
+                array_push($result, self::generateRandomString(8));
+            } else {
+                array_push($result, self::generateRandomString(4));
+            }
+        }
+
+        array_push($result, date("Ymd"));
+
+        return implode("-", $result);
+    }
 }

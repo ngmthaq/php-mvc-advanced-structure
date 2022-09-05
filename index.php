@@ -10,5 +10,6 @@ $app = new App();
 // Api Ver 1
 $app->get("/api/v1/hello", [WelcomeController::class, "hello"]);
 $app->get("/api/v1/users", [WelcomeController::class, "users"]);
+$app->get("/api/v1/demo", [WelcomeController::class, "demo"]);
 
 $app->run();

@@ -12,7 +12,7 @@ final class Response
             if ($json === false) {
                 $json = '{"error":"unknown"}';
             }
-            http_response_code(STATUS_SERVER_INTERNAL_ERROR);
+            http_response_code(STATUS_INTERNAL_SERVER_ERROR);
         } else {
             http_response_code($status);
         }

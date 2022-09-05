@@ -29,4 +29,11 @@ class WelcomeController extends Controller
 
         return $this->res->json(["users" => $users]);
     }
+
+    public function demo()
+    {
+        $demo = $this->builder->table("demo")->get();
+
+        return $this->res->json(compact("demo"));
+    }
 }

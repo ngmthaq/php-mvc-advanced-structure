@@ -2,7 +2,7 @@
 
 namespace Core\Database;
 
-use Error;
+use Exception;
 use PDOStatement;
 use Src\Helpers\Helper;
 
@@ -78,7 +78,7 @@ final class QueryBuilder
     {
         $table = $table === "" ? $this->table : $table;
         if ($table === "") {
-            throw new Error("Current table name not found");
+            throw new Exception("Current table name not found");
         }
 
         $query = "INNER JOIN $relatedTable ON $table.$column = $relatedTable.$relatedColumn";
@@ -90,7 +90,7 @@ final class QueryBuilder
     {
         $table = $table === "" ? $this->table : $table;
         if ($table === "") {
-            throw new Error("Current table name not found");
+            throw new Exception("Current table name not found");
         }
 
         $query = "LEFT JOIN $relatedTable ON $table.$column = $relatedTable.$relatedColumn";
@@ -102,7 +102,7 @@ final class QueryBuilder
     {
         $table = $table === "" ? $this->table : $table;
         if ($table === "") {
-            throw new Error("Current table name not found");
+            throw new Exception("Current table name not found");
         }
 
         $query = "RIGHT JOIN $relatedTable ON $table.$column = $relatedTable.$relatedColumn";
