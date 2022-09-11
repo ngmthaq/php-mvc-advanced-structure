@@ -18,6 +18,11 @@ class WelcomeController extends Controller
         return $this->res->json(["hello" => "world"]);
     }
 
+    public function helloPost()
+    {
+        return $this->res->json(["hello" => "world in post method"]);
+    }
+
     public function users()
     {
         $users = $this->builder->table("users")
