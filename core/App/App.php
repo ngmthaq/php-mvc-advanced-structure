@@ -150,7 +150,7 @@ class App
     {
         $response = ["error" => "Internal Server Error"];
         if (Helper::env("APP_ENV") === "development") {
-            $response = array_merge($response, ["stack" => [
+            $response = array_merge($response, ["details" => [
                 "message" => $e->getMessage(),
                 "file" => $e->getFile(),
                 "line" => $e->getLine(),
