@@ -6,6 +6,7 @@ use Core\Request\Request;
 use Core\Response\Response;
 use Dotenv\Dotenv;
 use Exception;
+use ReflectionClass;
 use Src\Helpers\Helper;
 
 class App
@@ -43,35 +44,33 @@ class App
 
     public function get(string $uri, array $action, array $middlewares = [])
     {
-        $this->routes = array_merge(
-            $this->routes,
-            [$uri => ["method" => "GET", "action" => $action, "middlewares" => $middlewares]]
-        );
+        $this->routes["GET"][$uri] = ["action" => $action, "middlewares" => $middlewares];
     }
 
     public function post(string $uri, array $action, array $middlewares = [])
     {
-        $this->routes = array_merge(
-            $this->routes,
-            [$uri => ["method" => "POST", "action" => $action, "middlewares" => $middlewares]]
-        );
+        $this->routes["POST"][$uri] = ["action" => $action, "middlewares" => $middlewares];
     }
 
     public function run()
     {
         try {
-            $uri = explode("?", $_SERVER["REQUEST_URI"])[0];
-            if ($uri && array_key_exists($uri, $this->routes)) {
-                $req = new Request($this->routes[$uri]);
-                $res = new Response();
-                $isSuccess = $this->runMiddlewares($req, $res);
-                if ($isSuccess) {
-                    $this->runController($uri, $req, $res);
+            $method = Helper::server("REQUEST_METHOD");
+            if (array_key_exists($method, $this->routes)) {
+                $routes = $this->routes[$method];
+                $uri = explode("?", Helper::server("REQUEST_URI"))[0];
+                if ($uri && array_key_exists($uri, $routes)) {
+                    $req = new Request($routes[$uri]);
+                    $res = new Response();
+                    $isSuccess = $this->runMiddlewares($req, $res);
+                    if ($isSuccess) {
+                        $this->runController($uri, $req, $res);
+                    }
                 } else {
-                    return 0;
+                    $this->detectNFOrMNA(new Response());
                 }
             } else {
-                $this->runNotFoundResponse(new Response());
+                $this->detectNFOrMNA(new Response());
             }
         } catch (Exception $e) {
             $this->runISEResponse(new Response(), $e);
@@ -80,10 +79,20 @@ class App
 
     private function runController(string $uri, Request $req, Response $res)
     {
-        $action = $this->routes[$uri]["action"];
+        $method = Helper::server("REQUEST_METHOD");
+        $action = $this->routes[$method][$uri]["action"];
         $controller = $action[0];
         $callable = $action[1];
-        call_user_func_array([new $controller($req, $res), $callable], []);
+        $classConf = new ReflectionClass($controller);
+        $classMethods = $classConf->getMethods();
+        $classMethods = array_map(function ($method) {
+            return $method->name;
+        }, $classMethods);
+
+        $errorMsg = "Cannot find method '" . $callable . "' in class '" . $controller . "'";
+        in_array($callable, $classMethods)
+            ? call_user_func_array([new $controller($req, $res), $callable], [])
+            : $this->runISEResponse(new Response(), new Exception($errorMsg));
     }
 
     private function runMiddlewares(Request $req, Response $res)
@@ -118,11 +127,30 @@ class App
         return $res->json(["error" => "Not Found"], STATUS_NOT_FOUND);
     }
 
+    private function runMethodNotAllowedResponse(Response $res)
+    {
+        return $res->json(["error" => "Method Not Allowed"], STATUS_METHOD_NOT_ALLOWED);
+    }
+
+    private function detectNFOrMNA(Response $res)
+    {
+        $get = array_key_exists("GET", $this->routes) ? $this->routes["GET"] : [];
+        $post = array_key_exists("POST", $this->routes) ? $this->routes["POST"] : [];
+        $uri = explode("?", Helper::server("REQUEST_URI"))[0];
+
+        $isExistedInGet = in_array($uri, array_keys($get));
+        $isExistedInPost = in_array($uri, array_keys($post));
+
+        return $isExistedInGet || $isExistedInPost
+            ? $this->runMethodNotAllowedResponse($res)
+            : $this->runNotFoundResponse($res);
+    }
+
     private function runISEResponse(Response $res, Exception $e)
     {
         $response = ["error" => "Internal Server Error"];
         if (Helper::env("APP_ENV") === "development") {
-            $response = array_merge($response, ["stack" => [
+            $response = array_merge($response, ["details" => [
                 "message" => $e->getMessage(),
                 "file" => $e->getFile(),
                 "line" => $e->getLine(),

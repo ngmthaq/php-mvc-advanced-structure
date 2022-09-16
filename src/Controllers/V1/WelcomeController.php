@@ -5,6 +5,7 @@ namespace Src\Controllers\V1;
 use Core\Controller\Controller;
 use Core\Request\Request;
 use Core\Response\Response;
+use Src\Validators\DemoValidator;
 
 class WelcomeController extends Controller
 {
@@ -15,7 +16,15 @@ class WelcomeController extends Controller
 
     public function hello()
     {
-        return $this->res->json(["hello" => "world"]);
+        $validator = new DemoValidator($this->req);
+        if ($validator->validate()) {
+            return $this->res->json(["hello" => $this->req->query("name")]);
+        }
+    }
+
+    public function helloPost()
+    {
+        return $this->res->json(["hello" => "world in post method"]);
     }
 
     public function users()
