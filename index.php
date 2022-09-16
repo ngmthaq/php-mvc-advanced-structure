@@ -7,10 +7,12 @@ include_once("./vendor/autoload.php");
 
 $app = new App();
 
-// Api Ver 1
+// Get method
 $app->get("/api/v1/hello", [WelcomeController::class, "hello"]);
-$app->post("/api/v1/hello", [WelcomeController::class, "helloPost"]);
 $app->get("/api/v1/users", [WelcomeController::class, "users"]);
 $app->get("/api/v1/demo", [WelcomeController::class, "demo"]);
+
+// Post method
+$app->post("/api/v1/hello", [WelcomeController::class, "helloPost"]);
 
 $app->run();
