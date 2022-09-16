@@ -9,6 +9,7 @@ abstract class Validator
 {
     protected $req;
     protected $res;
+    protected $errors;
 
     public function __construct(Request $request)
     {
@@ -18,7 +19,26 @@ abstract class Validator
         $this->mutateQuery();
     }
 
-    abstract public function handle(): bool;
+    public function validate(): bool
+    {
+        if (!$this->handle()) {
+            $this->handleErrorResponse();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    abstract protected function handle(): bool;
+
+    protected function handleErrorResponse()
+    {
+        return $this->res->json([
+            "error" => "Failed Validation",
+            "details" => $this->errors,
+        ], STATUS_FAILED_VALIDATION);
+    }
 
     protected function mutateParams()
     {
