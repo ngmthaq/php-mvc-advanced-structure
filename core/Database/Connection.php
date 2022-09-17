@@ -8,7 +8,7 @@ use Src\Helpers\Helper;
 
 trait Connection
 {
-    protected $conn;
+    protected PDO $conn;
 
     final public function connect()
     {

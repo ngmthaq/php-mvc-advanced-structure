@@ -14,5 +14,8 @@ $app->get("/api/v1/demo", [WelcomeController::class, "demo"]);
 
 // Post method
 $app->post("/api/v1/hello", [WelcomeController::class, "helloPost"]);
+$app->post("/api/v1/users/insert", [WelcomeController::class, "insertUser"]);
+$app->post("/api/v1/users/update", [WelcomeController::class, "updateUser"]);
+$app->post("/api/v1/users/delete", [WelcomeController::class, "deleteUser"]);
 
 $app->run();
