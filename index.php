@@ -3,6 +3,7 @@
 use Core\App\App;
 
 include_once("./vendor/autoload.php");
+include_once("./helper.php");
 
 $app = new App();
 
