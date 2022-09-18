@@ -8,12 +8,12 @@ class UpdateUserValidator extends Validator
 {
     protected function handle(): bool
     {
-        $this->require("id");
-        $this->require("first_name");
-        $this->require("last_name");
-        $this->require("email");
-        $this->require("avatar");
-        $this->require("password");
+        $this->required("id");
+        $this->required("first_name");
+        $this->required("last_name");
+        $this->required("email");
+        $this->required("avatar");
+        $this->required("password");
 
         $this->exist("id", "users", "id");
         $this->unique("email", "users", "email");

@@ -9,7 +9,7 @@ trait Rules
 {
     protected QueryBuilder $builder;
 
-    protected function require(string $key): void
+    protected function required(string $key): void
     {
         if ($this->mode === USE_QUERY) {
             $data = $this->req->query();
