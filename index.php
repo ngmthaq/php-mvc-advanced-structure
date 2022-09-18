@@ -1,21 +1,21 @@
 <?php
 
 use Core\App\App;
-use Src\Controllers\V1\WelcomeController;
 
 include_once("./vendor/autoload.php");
 
 $app = new App();
 
-// Get method
-$app->get("/api/v1/hello", [WelcomeController::class, "hello"]);
-$app->get("/api/v1/users", [WelcomeController::class, "users"]);
-$app->get("/api/v1/demo", [WelcomeController::class, "demo"]);
+$getRoutes = include_once("./router/get.php");
+foreach ($getRoutes as $uri => $config) {
+    $middlewares = array_key_exists(3, $config) ? $config[3] : [];
+    $app->get($uri, [$config[0], $config[1]], $middlewares);
+}
 
-// Post method
-$app->post("/api/v1/hello", [WelcomeController::class, "helloPost"]);
-$app->post("/api/v1/users/insert", [WelcomeController::class, "insertUser"]);
-$app->post("/api/v1/users/update", [WelcomeController::class, "updateUser"]);
-$app->post("/api/v1/users/delete", [WelcomeController::class, "deleteUser"]);
+$postRoutes = include_once("./router/post.php");
+foreach ($postRoutes as $uri => $config) {
+    $middlewares = array_key_exists(3, $config) ? $config[3] : [];
+    $app->post($uri, [$config[0], $config[1]], $middlewares);
+}
 
 $app->run();
