@@ -3,8 +3,10 @@
 namespace Src\Controllers\V1;
 
 use Core\Controller\Controller;
+use Core\Hash\Hash;
 use Core\Request\Request;
 use Core\Response\Response;
+use Src\Validators\CheckUserValidator;
 use Src\Validators\DeleteUserValidator;
 use Src\Validators\DemoValidator;
 use Src\Validators\InsertUserValidator;
@@ -54,7 +56,9 @@ class WelcomeController extends Controller
         $validator = new InsertUserValidator($this->req, USE_PARAMS);
 
         if ($validator->validate()) {
-            $isInserted = $this->builder->table("users")->insert($this->req->params());
+            $data = $this->req->params();
+            $data["password"] = Hash::make($data["password"]);
+            $isInserted = $this->builder->table("users")->insert($data);
             if ($isInserted) {
                 $user = $this->builder->table("users")->where("email", $this->req->params("email"))->first();
                 $res = ["message" => "Insert Successfully", "user" => $user];
@@ -74,6 +78,7 @@ class WelcomeController extends Controller
             $status = STATUS_SUCCESS;
             $id = $this->req->params("id");
             $data = $this->req->params();
+            $data["password"] = Hash::make($data["password"]);
             $isUpdated = $this->builder->table("users")->where("id", $id)->update($data);
             if ($isUpdated) {
                 $user = $this->builder->table("users")->where("id", $id)->first();
@@ -103,6 +108,18 @@ class WelcomeController extends Controller
             }
 
             return $this->res->json($res, $status);
+        }
+    }
+
+    public function checkUser()
+    {
+        $validator = new CheckUserValidator($this->req);
+
+        if ($validator->validate()) {
+            $user = $this->builder->table("users")->where("id", $this->req->query("id"))->first();
+            $message = Hash::check($this->req->query("password"), $user["password"]) ? "Same" : "Diff";
+
+            return $this->res->json(compact("message"));
         }
     }
 }

@@ -8,7 +8,7 @@ class DeleteUserValidator extends Validator
 {
     protected function handle(): bool
     {
-        $this->require("id");
+        $this->required("id");
 
         return $this->validated;
     }

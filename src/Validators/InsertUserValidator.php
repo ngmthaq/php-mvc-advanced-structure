@@ -8,11 +8,11 @@ class InsertUserValidator extends Validator
 {
     protected function handle(): bool
     {
-        $this->require("first_name");
-        $this->require("last_name");
-        $this->require("email");
-        $this->require("avatar");
-        $this->require("password");
+        $this->required("first_name");
+        $this->required("last_name");
+        $this->required("email");
+        $this->required("avatar");
+        $this->required("password");
 
         $this->email("email");
         $this->unique("email", "users", "email");
