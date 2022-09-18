@@ -2,19 +2,27 @@
 
 namespace Core\Validator;
 
+use Core\Database\QueryBuilder;
 use Core\Request\Request;
 use Core\Response\Response;
 
 abstract class Validator
 {
-    protected $req;
-    protected $res;
-    protected $errors;
+    use Rules;
 
-    public function __construct(Request $request)
+    protected Request $req;
+    protected Response $res;
+    protected array $errors;
+    protected bool $validated;
+    protected int $mode;
+
+    public function __construct(Request $request, int $mode = USE_QUERY)
     {
         $this->req = $request;
         $this->res = new Response();
+        $this->builder = new QueryBuilder();
+        $this->validated = true;
+        $this->mode = $mode;
         $this->mutateParams();
         $this->mutateQuery();
     }
@@ -48,5 +56,11 @@ abstract class Validator
     protected function mutateQuery()
     {
         $this->req->mutateQuery($this->req->query());
+    }
+
+    protected function failedValidation(string $errorKey, string $errorMessage): void
+    {
+        $this->errors[$errorKey][] = $errorMessage;
+        if ($this->validated) $this->validated = false;
     }
 }

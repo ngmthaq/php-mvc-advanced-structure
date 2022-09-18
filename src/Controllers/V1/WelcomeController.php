@@ -51,7 +51,7 @@ class WelcomeController extends Controller
 
     public function insertUser()
     {
-        $validator = new InsertUserValidator($this->req);
+        $validator = new InsertUserValidator($this->req, USE_PARAMS);
 
         if ($validator->validate()) {
             $isInserted = $this->builder->table("users")->insert($this->req->params());
@@ -68,25 +68,19 @@ class WelcomeController extends Controller
 
     public function updateUser()
     {
-        $validator = new UpdateUserValidator($this->req);
+        $validator = new UpdateUserValidator($this->req, USE_PARAMS);
 
         if ($validator->validate()) {
             $status = STATUS_SUCCESS;
             $id = $this->req->params("id");
-            $isExisted = $this->builder->table("users")->where("id", $id)->first();
-            if ($isExisted) {
-                $data = $this->req->params();
-                $isUpdated = $this->builder->table("users")->where("id", $id)->update($data);
-                if ($isUpdated) {
-                    $user = $this->builder->table("users")->where("id", $id)->first();
-                    $res = ["message" => "Update Successfully", "user" => $user];
-                } else {
-                    $res = ["error" => "Update Failed"];
-                    $status = STATUS_INTERNAL_SERVER_ERROR;
-                }
+            $data = $this->req->params();
+            $isUpdated = $this->builder->table("users")->where("id", $id)->update($data);
+            if ($isUpdated) {
+                $user = $this->builder->table("users")->where("id", $id)->first();
+                $res = ["message" => "Update Successfully", "user" => $user];
             } else {
-                $res = ["error" => "User Not Found"];
-                $status = STATUS_FAILED_VALIDATION;
+                $res = ["error" => "Update Failed"];
+                $status = STATUS_INTERNAL_SERVER_ERROR;
             }
 
             return $this->res->json($res, $status);
@@ -95,23 +89,17 @@ class WelcomeController extends Controller
 
     public function deleteUser()
     {
-        $validator = new DeleteUserValidator($this->req);
+        $validator = new DeleteUserValidator($this->req, USE_PARAMS);
 
         if ($validator->validate()) {
             $status = STATUS_SUCCESS;
             $id = $this->req->params("id");
-            $isExisted = $this->builder->table("users")->where("id", $id)->first();
-            if ($isExisted) {
-                $isDeleted = $this->builder->table("users")->where("id", $id)->delete();
-                if ($isDeleted) {
-                    $res = ["message" => "Delete Successfully"];
-                } else {
-                    $res = ["error" => "Delete Failed"];
-                    $status = STATUS_INTERNAL_SERVER_ERROR;
-                }
+            $isDeleted = $this->builder->table("users")->where("id", $id)->delete();
+            if ($isDeleted) {
+                $res = ["message" => "Delete Successfully"];
             } else {
-                $res = ["error" => "User Not Found"];
-                $status = STATUS_FAILED_VALIDATION;
+                $res = ["error" => "Delete Failed"];
+                $status = STATUS_INTERNAL_SERVER_ERROR;
             }
 
             return $this->res->json($res, $status);

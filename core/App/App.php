@@ -34,6 +34,10 @@ class App
         define("STATUS_FAILED_VALIDATION", 422);
         define("STATUS_INTERNAL_SERVER_ERROR", 500);
         define("STATUS_SERVICE_UNAVAILABLE", 503);
+
+        // Request mode
+        define("USE_QUERY", 0);
+        define("USE_PARAMS", 1);
     }
 
     public function env()

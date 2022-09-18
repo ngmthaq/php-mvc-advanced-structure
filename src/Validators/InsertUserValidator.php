@@ -8,33 +8,18 @@ class InsertUserValidator extends Validator
 {
     protected function handle(): bool
     {
-        $isValidate = true;
+        $this->require("first_name");
+        $this->require("last_name");
+        $this->require("email");
+        $this->require("avatar");
+        $this->require("password");
 
-        if (!$this->req->params("first_name")) {
-            $this->errors["first_name"] = "The first_name field is required";
-            if ($isValidate) $isValidate = false;
-        }
+        $this->email("email");
+        $this->unique("email", "users", "email");
 
-        if (!$this->req->params("last_name")) {
-            $this->errors["last_name"] = "The last_name field is required";
-            if ($isValidate) $isValidate = false;
-        }
+        $this->min("password", 6);
+        $this->max("password", 12);
 
-        if (!$this->req->params("email")) {
-            $this->errors["email"] = "The email field is required";
-            if ($isValidate) $isValidate = false;
-        }
-
-        if (!$this->req->params("avatar")) {
-            $this->errors["avatar"] = "The avatar field is required";
-            if ($isValidate) $isValidate = false;
-        }
-
-        if (!$this->req->params("password")) {
-            $this->errors["password"] = "The password field is required";
-            if ($isValidate) $isValidate = false;
-        }
-
-        return $isValidate;
+        return $this->validated;
     }
 }

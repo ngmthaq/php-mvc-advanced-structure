@@ -8,13 +8,8 @@ class DeleteUserValidator extends Validator
 {
     protected function handle(): bool
     {
-        $isValidate = true;
+        $this->require("id");
 
-        if (!$this->req->params("id")) {
-            $this->errors["id"] = "The id field is required";
-            if ($isValidate) $isValidate = false;
-        }
-
-        return $isValidate;
+        return $this->validated;
     }
 }
