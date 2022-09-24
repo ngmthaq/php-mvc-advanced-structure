@@ -4,10 +4,10 @@ namespace Core\App;
 
 use Core\Request\Request;
 use Core\Response\Response;
+use Core\Helpers\Helper;
 use Dotenv\Dotenv;
 use Exception;
 use ReflectionClass;
-use Src\Helpers\Helper;
 
 class App
 {

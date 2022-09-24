@@ -2,9 +2,9 @@
 
 namespace Core\Database;
 
+use Core\Helpers\Helper;
 use PDO;
 use PDOException;
-use Src\Helpers\Helper;
 
 trait Connection
 {

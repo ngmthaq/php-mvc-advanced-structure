@@ -29,11 +29,9 @@
  * Email: r.aachich@gmail.com
  */
 
-namespace Src\Helpers;
+namespace Core\Helpers;
 
-use Core\Helpers\Helper;
-
-class Pluralizer extends Helper
+class Pluralizer
 {
     static $plural = array(
         '/(quiz)$/i'               => "$1zes",

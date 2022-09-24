@@ -4,7 +4,6 @@ namespace Core\Database;
 
 use Exception;
 use PDOStatement;
-use Src\Helpers\Helper;
 
 final class QueryBuilder
 {

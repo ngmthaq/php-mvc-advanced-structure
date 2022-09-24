@@ -3,8 +3,8 @@
 namespace Core\Model;
 
 use Core\Database\Connection;
+use Core\Helpers\Pluralizer;
 use Exception;
-use Src\Helpers\Pluralizer;
 use ReflectionClass;
 
 abstract class Model

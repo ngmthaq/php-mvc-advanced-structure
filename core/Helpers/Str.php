@@ -1,10 +1,8 @@
 <?php
 
-namespace Src\Helpers;
+namespace Core\Helpers;
 
-use Core\Helpers\Helper;
-
-final class Str extends Helper
+final class Str
 {
     public static function generateRandomString($length = 10)
     {
