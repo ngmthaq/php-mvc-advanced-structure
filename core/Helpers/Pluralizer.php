@@ -31,7 +31,7 @@
 
 namespace Core\Helpers;
 
-class Pluralizer
+final class Pluralizer
 {
     static $plural = array(
         '/(quiz)$/i'               => "$1zes",
@@ -179,7 +179,7 @@ class Pluralizer
         //
     }
 
-    public static function pluralize($string)
+    final public static function pluralize($string)
     {
         // save some time in the case that singular and plural are the same
         if (in_array(strtolower($string), self::$unchangeable))
@@ -202,7 +202,7 @@ class Pluralizer
         return $string;
     }
 
-    public static function singularize($string)
+    final public static function singularize($string)
     {
         // save some time in the case that singular and plural are the same
         if (in_array(strtolower($string), self::$unchangeable))
@@ -225,7 +225,7 @@ class Pluralizer
         return $string;
     }
 
-    public static function pluralizeIf($count, $string)
+    final public static function pluralizeIf($count, $string)
     {
         if ($count == 1)
             return "1 $string";
