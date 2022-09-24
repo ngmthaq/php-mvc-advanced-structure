@@ -5,6 +5,7 @@ namespace Core\App;
 use Core\Request\Request;
 use Core\Response\Response;
 use Core\Helpers\Helper;
+use Core\Helpers\Logger;
 use Dotenv\Dotenv;
 use Exception;
 use ReflectionClass;
@@ -152,6 +153,7 @@ class App
 
     private function runISEResponse(Response $res, Exception $e)
     {
+        Logger::write($e);
         $response = ["error" => "Internal Server Error"];
         if (Helper::env("APP_ENV") === "development") {
             $response = array_merge($response, ["details" => [

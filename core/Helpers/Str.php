@@ -4,7 +4,7 @@ namespace Core\Helpers;
 
 final class Str
 {
-    public static function generateRandomString($length = 10)
+    final public static function generateRandomString($length = 10)
     {
         $time = time();
         $characters = "0123456789abcdefghijklmnopqrstuvwxyz" . $time;
@@ -17,7 +17,7 @@ final class Str
         return $randomString;
     }
 
-    public static function randomId()
+    final public static function randomId()
     {
         $result = [];
 
