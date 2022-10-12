@@ -39,6 +39,10 @@ class App
         // Request mode
         define("USE_QUERY", 0);
         define("USE_PARAMS", 1);
+
+        // Resources return type
+        define("BASE64_RESOURCES", 0);
+        define("BINARY_RESOURCES", 1);
     }
 
     public function env()

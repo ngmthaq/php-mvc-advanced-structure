@@ -127,4 +127,9 @@ class WelcomeController extends Controller
             return $this->res->json(compact("message"));
         }
     }
+
+    public function file()
+    {
+        return $this->res->resource("images/demo.png");
+    }
 }

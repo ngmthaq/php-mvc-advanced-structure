@@ -3,3 +3,6 @@
 .env
 /logs/**/*
 /public/libs/*
+/resources/*
+
+!/resources/.gitkeep
