@@ -13,3 +13,8 @@ function dd()
     echo "</pre>";
     die();
 }
+
+function assets(string $path)
+{
+    echo "./public/" . $path;
+}

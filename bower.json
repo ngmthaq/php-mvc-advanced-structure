@@ -1,0 +1,15 @@
+{
+  "name": "php",
+  "homepage": "https://github.com/ngmthaq/php",
+  "authors": ["ngmthaq <nguyenmanhthang2000.fb@gmail.com>"],
+  "description": "php project",
+  "main": "index.php",
+  "keywords": ["php"],
+  "license": "MIT",
+  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"],
+  "dependencies": {
+    "bootstrap": "4.6.1",
+    "jquery": "2.2.4",
+    "fontawesome": "6.0.0"
+  }
+}

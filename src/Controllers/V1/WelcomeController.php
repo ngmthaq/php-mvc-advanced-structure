@@ -21,7 +21,7 @@ class WelcomeController extends Controller
 
     public function index()
     {
-        return $this->res->view("pages.index", ["hello" => "Thắng"]);
+        return $this->res->view("pages.index", ["hello" => "World"]);
     }
 
     public function hello()
