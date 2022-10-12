@@ -19,6 +19,11 @@ class WelcomeController extends Controller
         parent::__construct($req, $res);
     }
 
+    public function index()
+    {
+        return $this->res->view("pages.index", ["hello" => "Thắng"]);
+    }
+
     public function hello()
     {
         $validator = new DemoValidator($this->req);

@@ -2,8 +2,22 @@
 
 namespace Core\Response;
 
+use Core\View\View;
+
 final class Response
 {
+    protected $view;
+
+    public function __construct()
+    {
+        $this->view = new View();
+    }
+
+    final public function view(string $view, array $data = []): void
+    {
+        $this->view->render($view, $data);
+    }
+
     final public function json(mixed $data, int $status = STATUS_SUCCESS, array $headers = []): void
     {
         $json = json_encode($data);
