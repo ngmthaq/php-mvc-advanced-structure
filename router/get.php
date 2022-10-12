@@ -8,4 +8,5 @@ return [
     "/api/v1/users" => [WelcomeController::class, "users"],
     "/api/v1/demo" => [WelcomeController::class, "demo"],
     "/api/v1/users/check" => [WelcomeController::class, "checkUser"],
+    "/api/v1/file" => [WelcomeController::class, "file"],
 ];

@@ -2,3 +2,7 @@
 /composer.lock
 .env
 /logs/**/*
+/public/libs/*
+/resources/*
+
+!/resources/.gitkeep

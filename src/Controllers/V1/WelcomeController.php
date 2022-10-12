@@ -21,7 +21,7 @@ class WelcomeController extends Controller
 
     public function index()
     {
-        return $this->res->view("pages.index", ["hello" => "Thắng"]);
+        return $this->res->view("pages.index", ["hello" => "World"]);
     }
 
     public function hello()
@@ -126,5 +126,10 @@ class WelcomeController extends Controller
 
             return $this->res->json(compact("message"));
         }
+    }
+
+    public function file()
+    {
+        return $this->res->resource("images/demo.png");
     }
 }

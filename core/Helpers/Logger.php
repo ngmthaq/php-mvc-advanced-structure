@@ -8,7 +8,7 @@ final class Logger
 {
     final public static function write(Exception $e)
     {
-        $dir = __ROOT__ . "\\logs\\";
+        $dir = __ROOT__ . "\\resources\\logs\\";
         $fileName = gmdate("d_m_Y") . "_UTC.log";
         $file = fopen($dir . $fileName, "a");
         $time = "[" . time() . "]: ";
