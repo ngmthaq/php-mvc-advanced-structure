@@ -155,12 +155,28 @@ class App
 
     private function runNotFoundResponse(Response $res)
     {
-        return $res->json(["error" => "Not Found"], STATUS_NOT_FOUND);
+        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
+        if (array_key_exists(1, $urlSplit)) {
+            $prefix = $urlSplit[1];
+            if ($prefix === "api") {
+                return $res->json(["error" => "Not Found"], STATUS_NOT_FOUND);
+            }
+        }
+
+        return $res->view("templates._404");
     }
 
     private function runMethodNotAllowedResponse(Response $res)
     {
-        return $res->json(["error" => "Method Not Allowed"], STATUS_METHOD_NOT_ALLOWED);
+        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
+        if (array_key_exists(1, $urlSplit)) {
+            $prefix = $urlSplit[1];
+            if ($prefix === "api") {
+                return $res->json(["error" => "Method Not Allowed"], STATUS_METHOD_NOT_ALLOWED);
+            }
+        }
+
+        return $res->view("templates._404");
     }
 
     private function detectNFOrMNA(Response $res)
@@ -180,7 +196,9 @@ class App
     private function runISEResponse(Response $res, Exception $e)
     {
         Logger::write($e);
+        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
         $response = ["error" => "Internal Server Error"];
+
         if (Helper::env("APP_ENV") === "development") {
             $response = array_merge($response, ["details" => [
                 "message" => $e->getMessage(),
@@ -190,6 +208,13 @@ class App
             ]]);
         }
 
-        return $res->json($response, STATUS_INTERNAL_SERVER_ERROR);
+        if (array_key_exists(1, $urlSplit)) {
+            $prefix = $urlSplit[1];
+            if ($prefix === "api") {
+                return $res->json($response, STATUS_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        return $res->view("templates._500", ["error" => json_encode($response)]);
     }
 }

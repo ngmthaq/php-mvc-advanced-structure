@@ -3,6 +3,7 @@
 session_start();
 
 use Core\App\App;
+use Core\Helpers\Helper;
 
 include_once("./vendor/autoload.php");
 include_once("./helper.php");

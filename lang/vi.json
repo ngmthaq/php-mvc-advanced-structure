@@ -1,3 +1,4 @@
 {
-    "hello": "Xin chào :name:"
+    "_404": "Không tìm thấy trang",
+    "_500": "Oops! Đã xảy ra lỗi"
 }
