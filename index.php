@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 use Core\App\App;
 
 include_once("./vendor/autoload.php");

@@ -4,8 +4,7 @@
 
 <?php $mainLayout->slot("main") ?>
 
-<h1>Hello <?php echo $hello ?></h1>
-<img src="<?php echo resources("images/demo.png") ?>" alt="">
+<h1>Hello <?php trans("hello", ["name" => "Thắng"]) ?></h1>
 
 <?php $mainLayout->endSlot("main") ?>
 
