@@ -22,4 +22,8 @@ foreach ($postRoutes as $uri => $config) {
     $app->post($uri, [$config[0], $config[1]], $middlewares);
 }
 
-$app->run();
+if ((int)Helper::env("APP_MAINTENANCE")) {
+    $app->maintenance();
+} else {
+    $app->run();
+}

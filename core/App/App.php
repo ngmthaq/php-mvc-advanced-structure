@@ -217,4 +217,18 @@ class App
 
         return $res->view("templates._500", ["error" => json_encode($response)]);
     }
+
+    public function maintenance()
+    {
+        $res = new Response();
+        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
+        if (array_key_exists(1, $urlSplit)) {
+            $prefix = $urlSplit[1];
+            if ($prefix === "api") {
+                return $res->json(["error" => "Service Unavailable"], STATUS_SERVICE_UNAVAILABLE);
+            }
+        }
+
+        return $res->view("templates._503");
+    }
 }
