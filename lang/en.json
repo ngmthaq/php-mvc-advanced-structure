@@ -1,3 +1,4 @@
 {
-    "hello": "Hello :name:"
+    "_404": "Page Not Found",
+    "_500": "Server Internal Error"
 }
