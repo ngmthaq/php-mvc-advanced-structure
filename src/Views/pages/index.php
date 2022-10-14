@@ -5,7 +5,6 @@
 <?php $mainLayout->slot("main") ?>
 
 <h1>Hello <?php echo $hello ?></h1>
-<img src="<?php echo resources("images/demo.png") ?>" alt="">
 
 <?php $mainLayout->endSlot("main") ?>
 

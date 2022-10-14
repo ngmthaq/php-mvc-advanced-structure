@@ -6,6 +6,7 @@ use Core\Request\Request;
 use Core\Response\Response;
 use Core\Helpers\Helper;
 use Core\Helpers\Logger;
+use Core\Locale\Locale;
 use Dotenv\Dotenv;
 use Exception;
 use ReflectionClass;
@@ -43,6 +44,11 @@ class App
         // Resources return type
         define("BASE64_RESOURCES", 0);
         define("BINARY_RESOURCES", 1);
+
+        // Lang const
+        define("LOCALE_KEY", "locale");
+        define("DEFAULT_LOCALE_KEY", "default_locale");
+        define("AVAILABLE_LOCALES_KEY", "available_locales");
     }
 
     public function env()
@@ -61,9 +67,25 @@ class App
         $this->routes["POST"][$uri] = ["action" => $action, "middlewares" => $middlewares];
     }
 
+    public function configSession()
+    {
+        if ($_ENV["APP_KEY"] === "") {
+            throw new Exception("Missing APP_KEY enviroment variable");
+        } else {
+            if (empty($_SESSION["APP_KEY"]) || strcmp($_ENV["APP_KEY"], $_SESSION["APP_KEY"]) !== 0) {
+                $locale = new Locale();
+                session_unset();
+                $_SESSION["APP_KEY"] = $_ENV["APP_KEY"];
+                $locale->config();
+                reload();
+            }
+        }
+    }
+
     public function run()
     {
         try {
+            $this->configSession();
             $method = Helper::server("REQUEST_METHOD");
             if (array_key_exists($method, $this->routes)) {
                 $routes = $this->routes[$method];

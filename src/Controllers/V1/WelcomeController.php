@@ -4,6 +4,7 @@ namespace Src\Controllers\V1;
 
 use Core\Controller\Controller;
 use Core\Hash\Hash;
+use Core\Locale\Locale;
 use Core\Request\Request;
 use Core\Response\Response;
 use Src\Validators\CheckUserValidator;
