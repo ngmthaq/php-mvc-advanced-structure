@@ -58,4 +58,22 @@ final class Locale
             throw new Exception("Invalid locale value '$value'");
         }
     }
+
+    final public function trans(string $format, array $args = [])
+    {
+        $locale = Helper::session(LOCALE_KEY);
+        if (file_exists($dir = __ROOT__ . "\\lang\\" . $locale . ".json")) {
+            $json = file_get_contents($dir);
+            $contents = (array)json_decode($json);
+            if (array_key_exists($format, $contents)) {
+                $content = $contents[$format];
+                foreach ($args as $key => $arg) {
+                    $content = str_replace(":" . $key . ":", $arg, $content);
+                }
+                echo $content;
+            }
+        }
+
+        return $format;
+    }
 }

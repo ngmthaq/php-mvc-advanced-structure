@@ -5,7 +5,7 @@ $cmd = array_key_exists(1, $argv) ? $argv[1] : null;
 if ($cmd) {
     if ($cmd === "refresh") {
         generateKey();
-        echo "Clear server successfully";
+        echo "Clear server data successfully";
     }
 }
 

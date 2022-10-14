@@ -47,6 +47,12 @@ function changeLocale(string $data)
     reload();
 }
 
+function trans(string $format, array $args = [])
+{
+    $locale = new Locale();
+    $locale->trans($format, $args);
+}
+
 function reload()
 {
     header("Refresh:0");
