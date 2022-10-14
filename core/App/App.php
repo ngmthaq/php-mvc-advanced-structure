@@ -49,6 +49,9 @@ class App
         define("LOCALE_KEY", "locale");
         define("DEFAULT_LOCALE_KEY", "default_locale");
         define("AVAILABLE_LOCALES_KEY", "available_locales");
+
+        // Authenticate
+        define("AUTH_KEY", "authentication_storage_key");
     }
 
     public function env()
