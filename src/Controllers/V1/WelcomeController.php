@@ -22,6 +22,14 @@ class WelcomeController extends Controller
 
     public function index()
     {
+        if ($this->req->query("email") && $this->req->query("password")) {
+            $email = $this->req->query("email");
+            $password = $this->req->query("password");
+            $data = $this->auth->loginApi($email, $password);
+
+            return $this->res->json(compact("data"));
+        }
+
         return $this->res->view("pages.index", ["hello" => "World"]);
     }
 
@@ -119,14 +127,17 @@ class WelcomeController extends Controller
 
     public function checkUser()
     {
-        $validator = new CheckUserValidator($this->req);
+        // $validator = new CheckUserValidator($this->req);
 
-        if ($validator->validate()) {
-            $user = $this->builder->table("users")->where("id", $this->req->query("id"))->first();
-            $message = Hash::check($this->req->query("password"), $user["password"]) ? "Same" : "Diff";
+        // if ($validator->validate()) {
+        //     $user = $this->builder->table("users")->where("id", $this->req->query("id"))->first();
+        //     $message = Hash::check($this->req->query("password"), $user["password"]) ? "Same" : "Diff";
 
-            return $this->res->json(compact("message"));
-        }
+        //     return $this->res->json(compact("message"));
+        // }
+
+            $header = $this->req->getReqHeaders();
+            return $this->res->json(compact("header"));
     }
 
     public function file()

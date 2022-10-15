@@ -1,5 +1,6 @@
 <?php
 
+use Core\Helpers\Helper;
 use Core\Locale\Locale;
 
 function dd()
@@ -56,4 +57,18 @@ function trans(string $format, array $args = [])
 function reload()
 {
     header("Refresh:0");
+}
+
+function mysqlTimestamp($datetime = "now")
+{
+    if ($datetime === "now") {
+        return date('Y-m-d H:i:s');
+    } else {
+        return date('Y-m-d H:i:s', $datetime);
+    }
+}
+
+function isLogin()
+{
+    return Helper::cookie(AUTH_KEY) || Helper::session(AUTH_KEY) ? true : false;
 }

@@ -52,6 +52,7 @@ class App
 
         // Authenticate
         define("AUTH_KEY", "authentication_storage_key");
+        define("AUTH_REMEMBER_TOKEN", "authentication_remember_token_key");
     }
 
     public function env()

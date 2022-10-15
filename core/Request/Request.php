@@ -52,7 +52,7 @@ final class Request
         return null;
     }
 
-    private function getReqHeaders(): array
+    public function getReqHeaders(): array
     {
         $headers = array();
         foreach ($_SERVER as $key => $value) {

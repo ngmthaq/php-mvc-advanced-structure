@@ -111,17 +111,14 @@ function modifyColumn(string $tableName, string $colName, string $colConfig)
     }
 }
 
-function clearDatabase()
+function refreshDatabase()
 {
     try {
-        global $__conn;
-        $__conn->exec("SET foreign_key_checks = 0");
-        if ($result = $__conn->query("SHOW TABLES")) {
-            while ($row = $result->fetchAll()) {
-                $__conn->query('DROP TABLE IF EXISTS ' . $row[0][0]);
-            }
-        }
-        echo "\033[32mClear database data successfully  \033[0m" . PHP_EOL;
+        global $__conn, $__n;
+        $__conn->exec("DROP DATABASE $__n");
+        $__conn->exec("CREATE DATABASE $__n");
+        $__conn->exec("USE $__n");
+        echo "\033[32mRefresh database successfully  \033[0m" . PHP_EOL;
     } catch (\Throwable $th) {
         throw $th;
     }
@@ -130,7 +127,7 @@ function clearDatabase()
 function execute(callable $callback, bool $forceReloadDb = false)
 {
     try {
-        if ($forceReloadDb) clearDatabase();
+        if ($forceReloadDb) refreshDatabase();
         $callback();
     } catch (\Throwable $th) {
         echo "\033[31mERR: " . $th->getMessage() . "\033[0m" . PHP_EOL;
