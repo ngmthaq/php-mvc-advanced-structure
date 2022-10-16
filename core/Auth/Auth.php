@@ -78,7 +78,6 @@ final class Auth
                 $inserted = $this->builder->table("authentications")->insert($data);
                 if ($inserted) {
                     unset($data["id"]);
-                    unset($data["user_id"]);
 
                     return $data;
                 } else {

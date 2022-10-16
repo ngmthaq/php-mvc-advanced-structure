@@ -1,5 +1,6 @@
 <?php
 
+use Src\Middlewares\Authentication;
 use Src\Middlewares\HandleCors;
 use Src\Middlewares\TrimString;
 
@@ -8,5 +9,7 @@ return [
         HandleCors::class,
         TrimString::class,
     ],
-    "alias" => []
+    "alias" => [
+        "auth" => Authentication::class,
+    ]
 ];

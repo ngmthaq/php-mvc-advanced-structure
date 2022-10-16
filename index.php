@@ -13,13 +13,13 @@ $app = new App();
 
 $getRoutes = include_once("./router/get.php");
 foreach ($getRoutes as $uri => $config) {
-    $middlewares = array_key_exists(3, $config) ? $config[3] : [];
+    $middlewares = array_key_exists(2, $config) ? $config[2] : [];
     $app->get($uri, [$config[0], $config[1]], $middlewares);
 }
 
 $postRoutes = include_once("./router/post.php");
 foreach ($postRoutes as $uri => $config) {
-    $middlewares = array_key_exists(3, $config) ? $config[3] : [];
+    $middlewares = array_key_exists(2, $config) ? $config[2] : [];
     $app->post($uri, [$config[0], $config[1]], $middlewares);
 }
 

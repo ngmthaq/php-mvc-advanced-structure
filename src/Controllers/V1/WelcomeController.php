@@ -11,6 +11,7 @@ use Src\Validators\CheckUserValidator;
 use Src\Validators\DeleteUserValidator;
 use Src\Validators\DemoValidator;
 use Src\Validators\InsertUserValidator;
+use Src\Validators\LoginValidator;
 use Src\Validators\UpdateUserValidator;
 
 class WelcomeController extends Controller
@@ -136,12 +137,33 @@ class WelcomeController extends Controller
         //     return $this->res->json(compact("message"));
         // }
 
-            $header = $this->req->getReqHeaders();
-            return $this->res->json(compact("header"));
+        $header = $this->req->getReqHeaders();
+        return $this->res->json(compact("header"));
     }
 
     public function file()
     {
         return $this->res->resource("images/demo.png");
+    }
+
+    public function login()
+    {
+        $validator = new LoginValidator($this->req, USE_PARAMS);
+
+        if ($validator->validate()) {
+            $data = $this->auth->loginApi($this->req->params("email"), $this->req->params("password"));
+            if ($data) {
+                return $this->res->json($data);
+            } else {
+                return $this->res->json(["error" => "Wrong email or password"], STATUS_UNAUTHORIZED);
+            }
+        }
+    }
+
+    public function logout()
+    {
+        $this->auth->logoutApi();
+
+        return $this->res->json(["data" => "Logout successfully"]);
     }
 }
