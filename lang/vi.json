@@ -1,4 +1,5 @@
 {
     "_404": "Không tìm thấy trang",
-    "_500": "Oops! Đã xảy ra lỗi"
+    "_500": "Oops! Đã xảy ra lỗi",
+    "_503": "Máy chủ bảo trì"
 }

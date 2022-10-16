@@ -3,6 +3,7 @@
 session_start();
 
 use Core\App\App;
+use Core\Hash\Hash;
 use Core\Helpers\Helper;
 
 include_once("./vendor/autoload.php");
@@ -22,4 +23,8 @@ foreach ($postRoutes as $uri => $config) {
     $app->post($uri, [$config[0], $config[1]], $middlewares);
 }
 
-$app->run();
+if ((int)Helper::env("APP_MAINTENANCE")) {
+    $app->maintenance();
+} else {
+    $app->run();
+}

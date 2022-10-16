@@ -49,6 +49,10 @@ class App
         define("LOCALE_KEY", "locale");
         define("DEFAULT_LOCALE_KEY", "default_locale");
         define("AVAILABLE_LOCALES_KEY", "available_locales");
+
+        // Authenticate
+        define("AUTH_KEY", "authentication_storage_key");
+        define("AUTH_REMEMBER_TOKEN", "authentication_remember_token_key");
     }
 
     public function env()
@@ -216,5 +220,19 @@ class App
         }
 
         return $res->view("templates._500", ["error" => json_encode($response)]);
+    }
+
+    public function maintenance()
+    {
+        $res = new Response();
+        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
+        if (array_key_exists(1, $urlSplit)) {
+            $prefix = $urlSplit[1];
+            if ($prefix === "api") {
+                return $res->json(["error" => "Service Unavailable"], STATUS_SERVICE_UNAVAILABLE);
+            }
+        }
+
+        return $res->view("templates._503");
     }
 }

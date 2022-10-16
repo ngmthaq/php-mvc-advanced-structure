@@ -25,6 +25,13 @@ final class Helper
         return null;
     }
 
+    final public static function cookie(string $var = "*")
+    {
+        if ($var === "*") return $_COOKIE;
+        if (array_key_exists($var, $_COOKIE)) return $_COOKIE[$var];
+        return null;
+    }
+
     final public static function dump()
     {
         $arguments = func_get_args();
