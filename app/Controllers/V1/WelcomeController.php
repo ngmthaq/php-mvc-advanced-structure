@@ -1,18 +1,18 @@
 <?php
 
-namespace Src\Controllers\V1;
+namespace App\Controllers\V1;
 
 use Core\Controller\Controller;
 use Core\Hash\Hash;
 use Core\Locale\Locale;
 use Core\Request\Request;
 use Core\Response\Response;
-use Src\Validators\CheckUserValidator;
-use Src\Validators\DeleteUserValidator;
-use Src\Validators\DemoValidator;
-use Src\Validators\InsertUserValidator;
-use Src\Validators\LoginValidator;
-use Src\Validators\UpdateUserValidator;
+use App\Validators\CheckUserValidator;
+use App\Validators\DeleteUserValidator;
+use App\Validators\DemoValidator;
+use App\Validators\InsertUserValidator;
+use App\Validators\LoginValidator;
+use App\Validators\UpdateUserValidator;
 
 class WelcomeController extends Controller
 {

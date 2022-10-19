@@ -1,8 +1,8 @@
 <?php
 
-use Src\Middlewares\Authentication;
-use Src\Middlewares\HandleCors;
-use Src\Middlewares\TrimString;
+use App\Middlewares\Authentication;
+use App\Middlewares\HandleCors;
+use App\Middlewares\TrimString;
 
 return [
     "global" => [

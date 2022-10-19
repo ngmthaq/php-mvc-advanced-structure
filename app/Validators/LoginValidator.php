@@ -1,14 +1,14 @@
 <?php
 
-namespace Src\Validators;
+namespace App\Validators;
 
 use Core\Validator\Validator;
 
-class CheckUserValidator extends Validator
+class LoginValidator extends Validator
 {
     protected function handle(): bool
     {
-        $this->required("id");
+        $this->required("email");
         $this->required("password");
 
         return $this->validated;
