@@ -22,4 +22,9 @@ final class View
     {
         echo $this->config($template, $data, $mergeData);
     }
+
+    final public function getContent(string $template, array $data = [], array $mergeData = [])
+    {
+        return $this->config($template, $data, $mergeData);
+    }
 }

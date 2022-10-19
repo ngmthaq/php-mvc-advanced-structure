@@ -53,9 +53,15 @@ class WelcomeController extends Controller
 
     public function demo()
     {
-        $demo = $this->builder->table("demo")->get();
+        $isSendSuccess = $this->mailer
+            ->addReceiver("nguyenmanhthang2000.fb@gmail.com")
+            ->addSubject("Demo Email")
+            ->addView("pages.index", ["title" => "Thang"])
+            ->send();
 
-        return $this->res->json(compact("demo"));
+        return $isSendSuccess
+            ? $this->res->json(["message" => "success"])
+            : $this->res->json(["message" => "fail"], STATUS_INTERNAL_SERVER_ERROR);
     }
 
     public function insertUser()
