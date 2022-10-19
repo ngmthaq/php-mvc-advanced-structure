@@ -72,3 +72,9 @@ function isLogin()
 {
     return Helper::cookie(AUTH_KEY) || Helper::session(AUTH_KEY) ? true : false;
 }
+
+function locale()
+{
+    $locale = new Locale();
+    return $locale->get(LOCALE_KEY);
+}

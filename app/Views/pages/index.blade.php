@@ -1,7 +1,6 @@
 @extends('layouts.main')
 
 @push('css')
-    
 @endpush
 
 @section('title', 'PHP')
@@ -11,5 +10,7 @@
 @endsection
 
 @push('js')
-    
+    <script>
+        console.log(trans("_404"));
+    </script>
 @endpush

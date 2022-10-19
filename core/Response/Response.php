@@ -2,6 +2,7 @@
 
 namespace Core\Response;
 
+use Core\Locale\Locale;
 use Core\View\View;
 
 final class Response
@@ -31,6 +32,10 @@ final class Response
     final public function view(string $template, array $data = [], array $mergeData = [])
     {
         header('Content-Type: text/html; charset=UTF-8');
+        $locale = new Locale();
+        $currentLocale = $locale->get(LOCALE_KEY);
+        $lang = file_get_contents(__ROOT__ . "\\lang\\" . $currentLocale . ".json");
+        $mergeData = array_merge($mergeData, ["_lang" => $lang]);
         $this->view->render($template, $data, $mergeData);
     }
 
