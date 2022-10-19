@@ -23,15 +23,7 @@ class WelcomeController extends Controller
 
     public function index()
     {
-        if ($this->req->query("email") && $this->req->query("password")) {
-            $email = $this->req->query("email");
-            $password = $this->req->query("password");
-            $data = $this->auth->loginApi($email, $password);
-
-            return $this->res->json(compact("data"));
-        }
-
-        return $this->res->view("pages.index", ["hello" => "World"]);
+        return $this->res->view("pages.index", ["title" => "World"]);
     }
 
     public function hello()

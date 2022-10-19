@@ -3,7 +3,8 @@
   "description": "PHP project for API",
   "type": "project",
   "require": {
-    "vlucas/phpdotenv": "^5.4"
+    "vlucas/phpdotenv": "^5.4",
+    "jenssegers/blade": "^1.4"
   },
   "autoload": {
     "psr-4": {

@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="<?php assets("img/favicon.ico") ?>" type="image/x-icon">
-    <title><?php trans("_500") ?></title>
+    <link rel="shortcut icon" href="{{ assets("img/favicon.ico") }}" type="image/x-icon">
+    <title>{{ trans("_503") }}</title>
     <style>
         body {
             display: flex;
@@ -35,16 +35,8 @@
 </head>
 
 <body>
-    <h1>500</h1>
-    <p><?php trans("_500") ?></p>
-
-    <script>
-        let e = <?php echo $error ?>;
-        console.error(e.error);
-        if (e.details) {
-            console.error("Details", e.details);
-        }
-    </script>
+    <h1>503</h1>
+    <p>{{ trans("_503") }}</p>
 </body>
 
 </html>

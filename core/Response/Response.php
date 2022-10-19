@@ -28,10 +28,10 @@ final class Response
         }
     }
 
-    final public function view(string $view, array $data = []): void
+    final public function view(string $template, array $data = [], array $mergeData = [])
     {
         header('Content-Type: text/html; charset=UTF-8');
-        $this->view->render($view, $data);
+        $this->view->render($template, $data, $mergeData);
     }
 
     final public function json(mixed $data, int $status = STATUS_SUCCESS, array $headers = []): void
