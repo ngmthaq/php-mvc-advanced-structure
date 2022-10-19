@@ -2,21 +2,24 @@
 
 namespace Core\View;
 
+use Exception;
+use Jenssegers\Blade\Blade;
+
 final class View
 {
-    final public function render(string $__viewName, array $__vars = [])
+    final protected function config(string $template, array $data = [], array $mergeData = [])
     {
-        foreach ($__vars as $__key => $__var) {
-            $$__key = $__var;
-        }
-
-        $__path = __ROOT__ . "\\src\\Views\\" . str_replace(".", "\\", $__viewName) . ".php";
-
-        if (file_exists($__path)) {
-            include($__path);
+        $blade = new Blade(__ROOT__ . "\\src\\Views", __ROOT__ . "\\resources\\views");
+        $file = __ROOT__ . "\\src\\Views\\" . str_replace(".", "\\", $template) . ".blade.php";
+        if (file_exists($file)) {
+            return $blade->render(str_replace(".", "\\", $template), $data, $mergeData);
         } else {
-            echo "<h1>500 - Server Interner Error</h1>";
-            echo "<p>View " . $__viewName . " not found</p>";
+            throw new Exception("View not found");
         }
+    }
+
+    final public function render(string $template, array $data = [], array $mergeData = [])
+    {
+        echo $this->config($template, $data, $mergeData);
     }
 }
