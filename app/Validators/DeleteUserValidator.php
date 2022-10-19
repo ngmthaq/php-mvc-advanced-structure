@@ -1,14 +1,14 @@
 <?php
 
-namespace Src\Validators;
+namespace App\Validators;
 
 use Core\Validator\Validator;
 
-class DemoValidator extends Validator
+class DeleteUserValidator extends Validator
 {
     protected function handle(): bool
     {
-        $this->required("name");
+        $this->required("id");
 
         return $this->validated;
     }

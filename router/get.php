@@ -1,6 +1,6 @@
 <?php
 
-use Src\Controllers\V1\WelcomeController;
+use App\Controllers\V1\WelcomeController;
 
 return [
     "/" => [WelcomeController::class, "index"],
