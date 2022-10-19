@@ -9,4 +9,5 @@ return [
     "/api/v1/users/delete" => [WelcomeController::class, "deleteUser"],
     "/api/v1/login" => [WelcomeController::class, "login"],
     "/api/v1/logout" => [WelcomeController::class, "logout", ["auth"]],
+    "/api/v1/demo" => [WelcomeController::class, "demo"],
 ];
