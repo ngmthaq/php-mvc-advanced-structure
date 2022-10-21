@@ -26,7 +26,9 @@ class Authentication extends Middleware
             }
         }
 
-        $this->res->json(["error" => "Unauthorized"], STATUS_UNAUTHORIZED);
+        isApi()
+            ? $this->res->json(["error" => "Unauthorized"], STATUS_UNAUTHORIZED)
+            : $this->res->view("templates._401");
 
         return false;
     }

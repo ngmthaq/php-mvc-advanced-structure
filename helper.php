@@ -78,3 +78,21 @@ function locale()
     $locale = new Locale();
     return $locale->get(LOCALE_KEY);
 }
+
+function csrf()
+{
+    return Helper::cookie(CSRF_TOKEN_KEY);
+}
+
+function isApi()
+{
+    $urlSplit = explode("/", Helper::server("REQUEST_URI"));
+    if (array_key_exists(1, $urlSplit)) {
+        $prefix = $urlSplit[1];
+        if ($prefix === "api") {
+            return true;
+        }
+    }
+
+    return false;
+}
