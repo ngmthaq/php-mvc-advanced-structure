@@ -14,4 +14,9 @@ class WelcomeController extends Controller
     }
 
     /** REST OF CODE **/
+
+    public function index()
+    {
+        return $this->res->view("pages.index");
+    }
 }
