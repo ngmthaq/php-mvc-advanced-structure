@@ -4,7 +4,7 @@ namespace App\Middlewares;
 
 use Core\Middleware\Middleware;
 
-class Authentication extends Middleware
+class ApiAuthentication extends Middleware
 {
     public function handle(): bool
     {

@@ -29,8 +29,9 @@ final class Response
         }
     }
 
-    final public function view(string $template, array $data = [], array $mergeData = [])
+    final public function view(string $template, array $data = [], array $mergeData = [], int $status = STATUS_SUCCESS)
     {
+        http_response_code($status);
         header('Content-Type: text/html; charset=UTF-8');
         $locale = new Locale();
         $currentLocale = $locale->get(LOCALE_KEY);

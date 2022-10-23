@@ -78,3 +78,20 @@ function locale()
     $locale = new Locale();
     return $locale->get(LOCALE_KEY);
 }
+
+function csrf()
+{
+    return Helper::session(CSRF_TOKEN_KEY);
+}
+
+function isApi()
+{
+    $app = $GLOBALS[__APP__];
+    $method = Helper::server("REQUEST_METHOD");
+    $uri = Helper::server("REQUEST_URI");
+    $config = $app->getRoute($method, $uri);
+
+    if (!$config) return false;
+
+    return array_key_exists("isApi", $config) ? (bool)$config["isApi"] : false;
+}

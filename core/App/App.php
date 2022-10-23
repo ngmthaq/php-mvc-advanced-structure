@@ -7,6 +7,7 @@ use Core\Response\Response;
 use Core\Helpers\Helper;
 use Core\Helpers\Logger;
 use Core\Locale\Locale;
+use Core\Protection\Csrf;
 use Dotenv\Dotenv;
 use Exception;
 use ReflectionClass;
@@ -19,12 +20,15 @@ class App
     {
         $this->define();
         $this->env();
+        $this->configSession();
+        $this->configCsrf();
     }
 
     public function define()
     {
         // Directory
         define("__ROOT__", str_replace("\core\App", "", __DIR__));
+        define("__APP__", "__APP__");
 
         // HTTP Status Code
         define("STATUS_SUCCESS", 200);
@@ -53,6 +57,7 @@ class App
         // Authenticate
         define("AUTH_KEY", "authentication_storage_key");
         define("AUTH_REMEMBER_TOKEN", "authentication_remember_token_key");
+        define("CSRF_TOKEN_KEY", "csrf_token");
     }
 
     public function env()
@@ -61,35 +66,60 @@ class App
         $dotenv->load();
     }
 
-    public function get(string $uri, array $action, array $middlewares = [])
+    public function get(string $uri, array $action, array $middlewares = [], bool $isApi = false)
     {
-        $this->routes["GET"][$uri] = ["action" => $action, "middlewares" => $middlewares];
+        $this->routes["GET"][$uri] = ["action" => $action, "middlewares" => $middlewares, "isApi" => $isApi];
     }
 
-    public function post(string $uri, array $action, array $middlewares = [])
+    public function post(string $uri, array $action, array $middlewares = [], bool $isApi = false)
     {
-        $this->routes["POST"][$uri] = ["action" => $action, "middlewares" => $middlewares];
+        $this->routes["POST"][$uri] = ["action" => $action, "middlewares" => $middlewares, "isApi" => $isApi];
     }
 
-    public function configSession()
+    private function configSession()
     {
         if ($_ENV["APP_KEY"] === "") {
             throw new Exception("Missing APP_KEY enviroment variable");
         } else {
-            if (empty($_SESSION["APP_KEY"]) || strcmp($_ENV["APP_KEY"], $_SESSION["APP_KEY"]) !== 0) {
-                $locale = new Locale();
+            $locale = new Locale();
+            if (empty($_SESSION["APP_KEY"])) {
+                session_unset();
+                $_SESSION["APP_KEY"] = $_ENV["APP_KEY"];
+                $locale->config();
+            } else if (strcmp($_ENV["APP_KEY"], $_SESSION["APP_KEY"]) !== 0) {
                 session_unset();
                 $_SESSION["APP_KEY"] = $_ENV["APP_KEY"];
                 $locale->config();
                 reload();
+            } else {
+                //
             }
         }
+    }
+
+    private function configCsrf()
+    {
+        if (!Helper::session(CSRF_TOKEN_KEY)) {
+            $csrf = new Csrf();
+            $csrf->generate();
+        }
+    }
+
+    public function getRoute(string $method, string $uri)
+    {
+        if (array_key_exists($method, $this->routes)) {
+            $routes = $this->routes[$method];
+            if (array_key_exists($uri, $routes)) {
+                return $routes[$uri];
+            }
+        }
+
+        return null;
     }
 
     public function run()
     {
         try {
-            $this->configSession();
             $method = Helper::server("REQUEST_METHOD");
             if (array_key_exists($method, $this->routes)) {
                 $routes = $this->routes[$method];
@@ -159,28 +189,16 @@ class App
 
     private function runNotFoundResponse(Response $res)
     {
-        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
-        if (array_key_exists(1, $urlSplit)) {
-            $prefix = $urlSplit[1];
-            if ($prefix === "api") {
-                return $res->json(["error" => "Not Found"], STATUS_NOT_FOUND);
-            }
-        }
-
-        return $res->view("templates._404");
+        return isApi()
+            ? $res->json(["error" => "Not Found"], STATUS_NOT_FOUND)
+            : $res->view("templates._404", ["error" => json_encode(["error" => "Not Found"])], [], STATUS_NOT_FOUND);
     }
 
     private function runMethodNotAllowedResponse(Response $res)
     {
-        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
-        if (array_key_exists(1, $urlSplit)) {
-            $prefix = $urlSplit[1];
-            if ($prefix === "api") {
-                return $res->json(["error" => "Method Not Allowed"], STATUS_METHOD_NOT_ALLOWED);
-            }
-        }
-
-        return $res->view("templates._404");
+        return isApi()
+            ? $res->json(["error" => "Method Not Allowed"], STATUS_METHOD_NOT_ALLOWED)
+            : $res->view("templates._404", ["error" => json_encode(["error" => "Method Not Allowed"])], [], STATUS_METHOD_NOT_ALLOWED);
     }
 
     private function detectNFOrMNA(Response $res)
@@ -200,7 +218,6 @@ class App
     private function runISEResponse(Response $res, Exception $e)
     {
         Logger::write($e);
-        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
         $response = ["error" => "Internal Server Error"];
 
         if (Helper::env("APP_ENV") === "development") {
@@ -212,27 +229,17 @@ class App
             ]]);
         }
 
-        if (array_key_exists(1, $urlSplit)) {
-            $prefix = $urlSplit[1];
-            if ($prefix === "api") {
-                return $res->json($response, STATUS_INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return $res->view("templates._500", ["error" => json_encode($response)]);
+        return isApi()
+            ? $res->json($response, STATUS_INTERNAL_SERVER_ERROR)
+            : $res->view("templates._500", ["error" => json_encode($response)], [], STATUS_INTERNAL_SERVER_ERROR);
     }
 
     public function maintenance()
     {
         $res = new Response();
-        $urlSplit = explode("/", Helper::server("REQUEST_URI"));
-        if (array_key_exists(1, $urlSplit)) {
-            $prefix = $urlSplit[1];
-            if ($prefix === "api") {
-                return $res->json(["error" => "Service Unavailable"], STATUS_SERVICE_UNAVAILABLE);
-            }
-        }
 
-        return $res->view("templates._503");
+        return isApi()
+            ? $res->json(["error" => "Service Unavailable"], STATUS_SERVICE_UNAVAILABLE)
+            : $res->view("templates._503", ["error" => json_encode(["error" => "Service Unavailable"])], [], STATUS_SERVICE_UNAVAILABLE);
     }
 }

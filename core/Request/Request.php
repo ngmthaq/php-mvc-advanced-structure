@@ -64,4 +64,20 @@ final class Request
         }
         return $headers;
     }
+
+    public function getCookie(string $var = "*")
+    {
+        $stringCookie = $this->headers("Cookie") ?? "";
+        $cookieRaw = explode("; ", $stringCookie);
+        $cookie = [];
+
+        foreach ($cookieRaw as $c) {
+            $arr = explode("=", $c);
+            $cookie[$arr[0]] = array_key_exists(1, $arr) ? $arr[1] : "";
+        }
+
+        if ($var === "*") return $cookie;
+        if (array_key_exists($var, $cookie)) return $cookie[$var];
+        return null;
+    }
 }

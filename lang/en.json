@@ -1,5 +1,6 @@
 {
     "_404": "Page Not Found",
     "_500": "Server Internal Error",
-    "_503": "Service Unavailable"
+    "_503": "Service Unavailable",
+    "_401": "Unauthorized"
 }
