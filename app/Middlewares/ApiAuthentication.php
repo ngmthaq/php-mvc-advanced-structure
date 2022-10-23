@@ -4,7 +4,7 @@ namespace App\Middlewares;
 
 use Core\Middleware\Middleware;
 
-class Authentication extends Middleware
+class ApiAuthentication extends Middleware
 {
     public function handle(): bool
     {
@@ -26,9 +26,7 @@ class Authentication extends Middleware
             }
         }
 
-        isApi()
-            ? $this->res->json(["error" => "Unauthorized"], STATUS_UNAUTHORIZED)
-            : $this->res->view("templates._401");
+        $this->res->json(["error" => "Unauthorized"], STATUS_UNAUTHORIZED);
 
         return false;
     }
