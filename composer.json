@@ -2,7 +2,7 @@
   "name": "ngmthaq/php",
   "description": "PHP project for API",
   "type": "project",
-  "version": "0.1.0-dev",
+  "version": "0.1.1",
   "require": {
     "vlucas/phpdotenv": "^5.4",
     "jenssegers/blade": "^1.4",
