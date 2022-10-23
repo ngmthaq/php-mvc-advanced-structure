@@ -28,6 +28,7 @@ class App
     {
         // Directory
         define("__ROOT__", str_replace("\core\App", "", __DIR__));
+        define("__APP__", "__APP__");
 
         // HTTP Status Code
         define("STATUS_SUCCESS", 200);
@@ -65,14 +66,14 @@ class App
         $dotenv->load();
     }
 
-    public function get(string $uri, array $action, array $middlewares = [])
+    public function get(string $uri, array $action, array $middlewares = [], bool $isApi = false)
     {
-        $this->routes["GET"][$uri] = ["action" => $action, "middlewares" => $middlewares];
+        $this->routes["GET"][$uri] = ["action" => $action, "middlewares" => $middlewares, "isApi" => $isApi];
     }
 
-    public function post(string $uri, array $action, array $middlewares = [])
+    public function post(string $uri, array $action, array $middlewares = [], bool $isApi = false)
     {
-        $this->routes["POST"][$uri] = ["action" => $action, "middlewares" => $middlewares];
+        $this->routes["POST"][$uri] = ["action" => $action, "middlewares" => $middlewares, "isApi" => $isApi];
     }
 
     private function configSession()
@@ -98,10 +99,22 @@ class App
 
     private function configCsrf()
     {
-        if (!Helper::cookie(CSRF_TOKEN_KEY)) {
+        if (!Helper::session(CSRF_TOKEN_KEY)) {
             $csrf = new Csrf();
             $csrf->generate();
         }
+    }
+
+    public function getRoute(string $method, string $uri)
+    {
+        if (array_key_exists($method, $this->routes)) {
+            $routes = $this->routes[$method];
+            if (array_key_exists($uri, $routes)) {
+                return $routes[$uri];
+            }
+        }
+
+        return null;
     }
 
     public function run()
@@ -178,14 +191,14 @@ class App
     {
         return isApi()
             ? $res->json(["error" => "Not Found"], STATUS_NOT_FOUND)
-            : $res->view("templates._404", ["error" => json_encode(["error" => "Not Found"])]);
+            : $res->view("templates._404", ["error" => json_encode(["error" => "Not Found"])], [], STATUS_NOT_FOUND);
     }
 
     private function runMethodNotAllowedResponse(Response $res)
     {
         return isApi()
             ? $res->json(["error" => "Method Not Allowed"], STATUS_METHOD_NOT_ALLOWED)
-            : $res->view("templates._404", ["error" => json_encode(["error" => "Method Not Allowed"])]);
+            : $res->view("templates._404", ["error" => json_encode(["error" => "Method Not Allowed"])], [], STATUS_METHOD_NOT_ALLOWED);
     }
 
     private function detectNFOrMNA(Response $res)
@@ -218,7 +231,7 @@ class App
 
         return isApi()
             ? $res->json($response, STATUS_INTERNAL_SERVER_ERROR)
-            : $res->view("templates._500", ["error" => json_encode($response)]);
+            : $res->view("templates._500", ["error" => json_encode($response)], [], STATUS_INTERNAL_SERVER_ERROR);
     }
 
     public function maintenance()
@@ -226,7 +239,7 @@ class App
         $res = new Response();
 
         return isApi()
-            ? $res->json(["error" => "Service Unavailable"], STATUS_INTERNAL_SERVER_ERROR)
-            : $res->view("templates._503", ["error" => json_encode(["error" => "Service Unavailable"])]);
+            ? $res->json(["error" => "Service Unavailable"], STATUS_SERVICE_UNAVAILABLE)
+            : $res->view("templates._503", ["error" => json_encode(["error" => "Service Unavailable"])], [], STATUS_SERVICE_UNAVAILABLE);
     }
 }

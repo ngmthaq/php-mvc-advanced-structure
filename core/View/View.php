@@ -24,7 +24,7 @@ final class View
             return $this->csrf->csrfInputTag();
         });
 
-        $this->blade->directive("meta", function () {
+        $this->blade->directive("meta_csrf", function () {
             return $this->csrf->csrfMetaTag();
         });
     }

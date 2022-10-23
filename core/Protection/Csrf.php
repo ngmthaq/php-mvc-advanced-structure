@@ -13,7 +13,7 @@ final class Csrf
         $str = Str::generateRandomString(64);
         $token = Hash::make($str);
 
-        setcookie(CSRF_TOKEN_KEY, $token);
+        $_SESSION[CSRF_TOKEN_KEY] = $token;
     }
 
     final public function csrfMetaTag()
@@ -28,7 +28,7 @@ final class Csrf
 
     final public function validate(string $csrfToken)
     {
-        $token = Helper::cookie(CSRF_TOKEN_KEY);
+        $token = Helper::session(CSRF_TOKEN_KEY);
 
         return $token && $token === $csrfToken;
     }

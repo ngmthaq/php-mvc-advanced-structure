@@ -10,26 +10,22 @@ class CsrfProtection extends Middleware
 {
     public function handle(): bool
     {
+        if (isApi()) {
+            return true;
+        }
+
         $csrf = new Csrf();
         if (Helper::server("REQUEST_METHOD") === "GET") {
             return true;
         }
 
         if (Helper::server("REQUEST_METHOD") === "POST") {
-            $csrfConfigsPath = __ROOT__ . "\\configs\\csrf.php";
-            if (file_exists($csrfConfigsPath)) {
-                $csrfConfigs = require($csrfConfigsPath);
-                dd($_SERVER);
-            }
-
             if ($csrf->validate($this->req->params("_token") ?? "")) {
                 return true;
             }
         }
 
-        isApi()
-            ? $this->res->json(["error" => "Unauthorized", "details" => ["CSRF Protection"]], STATUS_UNAUTHORIZED)
-            : $this->res->view("templates._401");
+        $this->res->view("templates._401", [], [], STATUS_UNAUTHORIZED);
 
         return false;
     }

@@ -81,18 +81,17 @@ function locale()
 
 function csrf()
 {
-    return Helper::cookie(CSRF_TOKEN_KEY);
+    return Helper::session(CSRF_TOKEN_KEY);
 }
 
 function isApi()
 {
-    $urlSplit = explode("/", Helper::server("REQUEST_URI"));
-    if (array_key_exists(1, $urlSplit)) {
-        $prefix = $urlSplit[1];
-        if ($prefix === "api") {
-            return true;
-        }
-    }
+    $app = $GLOBALS[__APP__];
+    $method = Helper::server("REQUEST_METHOD");
+    $uri = Helper::server("REQUEST_URI");
+    $config = $app->getRoute($method, $uri);
 
-    return false;
+    if (!$config) return false;
+
+    return array_key_exists("isApi", $config) ? (bool)$config["isApi"] : false;
 }
