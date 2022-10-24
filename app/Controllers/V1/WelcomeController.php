@@ -22,6 +22,11 @@ class WelcomeController extends Controller
 
     public function demo()
     {
-        return $this->res->flash(["success" => "Open index success"])->redirect("/");
+        return $this->res->view("pages.file");
+    }
+
+    public function demoSaveFile()
+    {
+        
     }
 }
