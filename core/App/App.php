@@ -58,6 +58,9 @@ class App
         define("AUTH_KEY", "authentication_storage_key");
         define("AUTH_REMEMBER_TOKEN", "authentication_remember_token_key");
         define("CSRF_TOKEN_KEY", "csrf_token");
+
+        // Flash Sessions
+        define("FLASH_SESSION_TEMPLATE_KEY", "__FLASH__SS__TPL__");
     }
 
     public function env()
@@ -210,7 +213,7 @@ class App
         $isExistedInGet = in_array($uri, array_keys($get));
         $isExistedInPost = in_array($uri, array_keys($post));
 
-        return $isExistedInGet || $isExistedInPost
+        return $isExistedInPost || $isExistedInGet
             ? $this->runMethodNotAllowedResponse($res)
             : $this->runNotFoundResponse($res);
     }

@@ -4,6 +4,7 @@ namespace Core\Response;
 
 use Core\Locale\Locale;
 use Core\View\View;
+use Exception;
 
 final class Response
 {
@@ -23,9 +24,9 @@ final class Response
             header("Content-Transfer-Encoding: Binary");
             header("Content-Length:" . filesize($relativePath));
             header("Content-Disposition: attachment;");
-            echo resources($path, BINARY_RESOURCES);
+            echo resources($path, false, BINARY_RESOURCES);
         } else {
-            $this->json(["error" => "File not found"], STATUS_NOT_FOUND);
+            throw new Exception("Cannot find resource");
         }
     }
 
@@ -59,5 +60,19 @@ final class Response
 
         header('Content-Type: application/json; charset=utf-8');
         echo $json;
+    }
+
+    final public function redirect(string $path)
+    {
+        header('Location: ' . $path);
+    }
+
+    final public function flash(array $sessions)
+    {
+        foreach ($sessions as $key => $value) {
+            $_SESSION[FLASH_SESSION_TEMPLATE_KEY . $key] = $value;
+        }
+
+        return $this;
     }
 }

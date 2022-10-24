@@ -7,12 +7,14 @@ final class Request
     protected $_CONFIGS;
     protected $_ORIGIN_GET;
     protected $_ORIGIN_POST;
+    protected $_ORIGIN_FILE;
 
     final public function __construct(array $configs)
     {
         $this->_CONFIGS = $configs;
         $this->_ORIGIN_GET = $_GET;
         $this->_ORIGIN_POST = $_POST;
+        $this->_ORIGIN_FILE = $_FILES;
     }
 
     final public function mutateQuery(array $data)
@@ -41,6 +43,13 @@ final class Request
     {
         if ($var === "*") return $this->_ORIGIN_POST;
         if (array_key_exists($var, $this->_ORIGIN_POST)) return $this->_ORIGIN_POST[$var];
+        return null;
+    }
+
+    final public function files(string $var = "*"): mixed
+    {
+        if ($var === "*") return $this->_ORIGIN_FILE;
+        if (array_key_exists($var, $this->_ORIGIN_FILE)) return $this->_ORIGIN_FILE[$var];
         return null;
     }
 

@@ -22,9 +22,9 @@ function assets(string $path)
     echo "/public/" . $path;
 }
 
-function resources(string $path, int $type = BASE64_RESOURCES)
+function resources(string $path, bool $isFullPath = false, int $type = BASE64_RESOURCES)
 {
-    $path = str_replace("/", "\\", __ROOT__ . "\\resources\\" . $path);
+    $path = $isFullPath ? $path : str_replace("/", "\\", __ROOT__ . "\\resources\\" . $path);
     if (file_exists($path)) {
         $data = file_get_contents($path);
 
@@ -94,4 +94,13 @@ function isApi()
     if (!$config) return false;
 
     return array_key_exists("isApi", $config) ? (bool)$config["isApi"] : false;
+}
+
+function flash(string $key)
+{
+    if (array_key_exists(FLASH_SESSION_TEMPLATE_KEY . $key, Helper::session())) {
+        return Helper::session(FLASH_SESSION_TEMPLATE_KEY . $key);
+    }
+
+    return null;
 }

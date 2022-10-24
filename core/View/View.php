@@ -2,6 +2,7 @@
 
 namespace Core\View;
 
+use Core\Helpers\Helper;
 use Core\Protection\Csrf;
 use Exception;
 use Jenssegers\Blade\Blade;
@@ -42,10 +43,20 @@ final class View
     final public function render(string $template, array $data = [], array $mergeData = [])
     {
         echo $this->config($template, $data, $mergeData);
+        $this->unsetFlashSession();
     }
 
     final public function getContent(string $template, array $data = [], array $mergeData = [])
     {
         return $this->config($template, $data, $mergeData);
+    }
+
+    private function unsetFlashSession()
+    {
+        foreach (Helper::session() as $key => $value) {
+            if (str_contains($key, FLASH_SESSION_TEMPLATE_KEY)) {
+                unset($_SESSION[$key]);
+            }
+        }
     }
 }
