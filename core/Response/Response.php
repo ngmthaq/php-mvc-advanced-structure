@@ -60,4 +60,18 @@ final class Response
         header('Content-Type: application/json; charset=utf-8');
         echo $json;
     }
+
+    final public function redirect(string $path)
+    {
+        header('Location: ' . $path);
+    }
+
+    final public function flash(array $sessions)
+    {
+        foreach ($sessions as $key => $value) {
+            $_SESSION[FLASH_SESSION_TEMPLATE_KEY . $key] = $value;
+        }
+
+        return $this;
+    }
 }

@@ -19,4 +19,9 @@ class WelcomeController extends Controller
     {
         return $this->res->view("pages.index");
     }
+
+    public function demo()
+    {
+        return $this->res->flash(["success" => "Open index success"])->redirect("/");
+    }
 }

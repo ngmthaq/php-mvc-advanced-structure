@@ -58,6 +58,9 @@ class App
         define("AUTH_KEY", "authentication_storage_key");
         define("AUTH_REMEMBER_TOKEN", "authentication_remember_token_key");
         define("CSRF_TOKEN_KEY", "csrf_token");
+
+        // Flash Sessions
+        define("FLASH_SESSION_TEMPLATE_KEY", "__FLASH__SS__TPL__");
     }
 
     public function env()

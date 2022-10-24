@@ -95,3 +95,12 @@ function isApi()
 
     return array_key_exists("isApi", $config) ? (bool)$config["isApi"] : false;
 }
+
+function flash(string $key)
+{
+    if (array_key_exists(FLASH_SESSION_TEMPLATE_KEY . $key, Helper::session())) {
+        return Helper::session(FLASH_SESSION_TEMPLATE_KEY . $key);
+    }
+
+    return null;
+}
