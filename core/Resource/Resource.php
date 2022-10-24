@@ -3,6 +3,7 @@
 namespace Core\Resource;
 
 use Core\Helpers\Logger;
+use Core\Helpers\Str;
 
 final class Resource
 {
@@ -13,7 +14,7 @@ final class Resource
         $path = $this->dir . "/" . implode("/", $subFolder) . "/" . $fileName;
         $this->dir = null;
 
-        return resources($path, $type);
+        return resources($path, false, $type);
     }
 
     final public function dir(string $dir)
@@ -27,20 +28,19 @@ final class Resource
     {
         try {
             $fileName = $fileName ? $fileName : $file["name"];
+            $fileName = str_replace(" ", "_", Str::generateRandomString() . "_" . $fileName);
             $fileError = $file["error"];
             $fileTmpName = $file["tmp_name"];
-            $path = $this->dir . "/" . implode("/", $subFolder) . "/";
-            $path = str_replace("/", "\\", __ROOT__ . "\\resources\\" . $path);
+            $path = $this->dir . "/" . implode("/", $subFolder);
+            $path = str_replace("/", "\\", __ROOT__ . "\\resources\\files\\" . $path);
             $dir = $path . $fileName;
-            if (!is_dir($path)) mkdir($path);
+            if (!is_dir($path)) mkdir($path, 0777, true);
             if ($fileError === UPLOAD_ERR_OK) move_uploaded_file($fileTmpName, $dir);
-            $this->dir = null;
+            $this->dir = "";
 
             return $dir;
         } catch (\Throwable $th) {
-            Logger::write($th, "resource");
-
-            return null;
+            throw $th;
         }
     }
 }

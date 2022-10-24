@@ -6,6 +6,7 @@ use Core\Auth\Auth;
 use Core\Database\QueryBuilder;
 use Core\Mail\Mail;
 use Core\Request\Request;
+use Core\Resource\Resource;
 use Core\Response\Response;
 
 abstract class Controller
@@ -15,6 +16,7 @@ abstract class Controller
     protected $builder;
     protected $auth;
     protected $mailer;
+    protected $resource;
 
     public function __construct(Request $req, Response $res)
     {
@@ -24,5 +26,6 @@ abstract class Controller
         $this->builder = new QueryBuilder();
         $this->auth = new Auth($req);
         $this->mailer = new Mail();
+        $this->resource = new Resource();
     }
 }

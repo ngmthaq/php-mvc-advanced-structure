@@ -3,10 +3,11 @@
 namespace Core\Helpers;
 
 use Exception;
+use Throwable;
 
 final class Logger
 {
-    final public static function write(Exception $e, string $name = null)
+    final public static function write(Exception | Throwable $e, string $name = null)
     {
         $dir = __ROOT__ . "\\resources\\logs\\";
         if (!is_dir($dir)) mkdir($dir);

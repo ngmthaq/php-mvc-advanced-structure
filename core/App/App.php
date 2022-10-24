@@ -213,7 +213,7 @@ class App
         $isExistedInGet = in_array($uri, array_keys($get));
         $isExistedInPost = in_array($uri, array_keys($post));
 
-        return $isExistedInGet || $isExistedInPost
+        return $isExistedInPost || $isExistedInGet
             ? $this->runMethodNotAllowedResponse($res)
             : $this->runNotFoundResponse($res);
     }

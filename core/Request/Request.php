@@ -46,9 +46,11 @@ final class Request
         return null;
     }
 
-    final public function files(): mixed
+    final public function files(string $var = "*"): mixed
     {
-        
+        if ($var === "*") return $this->_ORIGIN_FILE;
+        if (array_key_exists($var, $this->_ORIGIN_FILE)) return $this->_ORIGIN_FILE[$var];
+        return null;
     }
 
     final public function headers(string $var = "*"): mixed
