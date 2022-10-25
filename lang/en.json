@@ -2,5 +2,10 @@
     "_404": "Page Not Found",
     "_500": "Server Internal Error",
     "_503": "Service Unavailable",
-    "_401": "Unauthorized"
+    "_401": "Unauthorized",
+    "header_home": "Home",
+    "header_template": "Template",
+    "header_contact": "Contact",
+    "header_account": "Account",
+    "header_search": "Search"
 }

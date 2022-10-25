@@ -2,5 +2,10 @@
     "_404": "Không tìm thấy trang",
     "_500": "Oops! Đã xảy ra lỗi",
     "_503": "Máy chủ bảo trì",
-    "_401": "Không được phép truy cập"
+    "_401": "Không được phép truy cập",
+    "header_home": "Trang chủ",
+    "header_template": "Giao diện",
+    "header_contact": "Liên lạc",
+    "header_account": "Tài khoản",
+    "header_search": "Tìm kiếm"
 }

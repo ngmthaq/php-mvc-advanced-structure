@@ -79,6 +79,13 @@ function locale()
     return $locale->get(LOCALE_KEY);
 }
 
+function locales()
+{
+    $localeJson = Helper::session(AVAILABLE_LOCALES_KEY);
+
+    return json_decode($localeJson, true);
+}
+
 function csrf()
 {
     return Helper::session(CSRF_TOKEN_KEY);
@@ -103,4 +110,9 @@ function flash(string $key)
     }
 
     return null;
+}
+
+function currentUri()
+{
+    return Helper::server("REQUEST_URI");
 }

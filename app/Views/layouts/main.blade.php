@@ -16,8 +16,11 @@
 </head>
 
 <body>
-    <div class="main">
-        @yield('main')
+    <div class="app">
+        @include('components.header')
+        <section class="main">
+            @yield('main')
+        </section>
     </div>
 
     <script>
@@ -35,6 +38,7 @@
     <script src="{{ assets('libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ assets('libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ assets('libs/fontawesome/js/all.min.js') }}"></script>
+    <script src="{{ assets('js/const.js') }}"></script>
     <script src="{{ assets('js/index.js') }}"></script>
 
     @stack('js')
